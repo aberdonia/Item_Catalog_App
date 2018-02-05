@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>ebay2</title>
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/bootstrap.css')}}">
+</head>
+<body>
+	<header>ebay2 <a href="{{url_for('sell')}}" class="btn btn-primary btn-lg active" role="button">Sell</a>
+		<a href="{{url_for('index')}}" class="btn btn-primary btn-lg active" role="button">Home</a></header>
+
+	<aside>
+		<ul>
+			{% for i in cats %}
+			<li><a href="{{url_for('category', cat = i)}}">{{i}}</a></li>
+			{% endfor %}
+		</ul>
+	</aside>
+	<main>
+		<h2>{{cat}} items</h2>
+		<ul>
+			{% for i in cat_items %}
+			<li><a href="{{url_for('item', cat = cat, item = i)}}">{{i}}</a></li>
+			{% endfor %}
+		</ul>
+		<h3>{{item.name}}</h3>
+		<p>{{item.description}}</p>
+	</main>
+</body>
+</html>
