@@ -12,6 +12,14 @@ class Category(Base):
     id = Column(Integer, primary_key = True)
     name =Column(String(250), nullable = False)
 
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(250), nullable=False)
+    email = Column(String(250), nullable=False)
+    picture = Column(String(250), nullable = False)
+
 class Item(Base):
     __tablename__ = 'item'
    
@@ -21,6 +29,11 @@ class Item(Base):
     description = Column(String(250), nullable = False)
     category_name = Column(String(250), ForeignKey('category.name'))
     customer = relationship(Category)
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
+
+
+
 
     # @property
     # def serialize(self):

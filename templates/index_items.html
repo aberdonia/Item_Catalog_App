@@ -7,7 +7,6 @@
 <body>
 	<header>ebay2 <a href="{{url_for('sell')}}" class="btn btn-primary btn-lg active" role="button">Sell</a>
 		<a href="{{url_for('index')}}" class="btn btn-primary btn-lg active" role="button">Home</a></header>
-
 	<aside>
 		<ul>
 			{% for i in cats %}
@@ -23,7 +22,13 @@
 			{% endfor %}
 		</ul>
 		<h3>{{item.name}}</h3>
-		<p>{{item.description}}</p>
+		<p>{{item.description}}
+			<br>
+		£{{item.value}}</p>
+		<p>Sold by {{seller.name}}</p>
+		<a href="{{url_for('editItem', item = item.name, cat = cat)}}">Edit</a>
+			<br>
+		<img src="{{seller.picture}}" width="200px">
 	</main>
 </body>
 </html>
