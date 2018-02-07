@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from database_setup import Base, Category, Item
+from database_setup import Base, Category, Item, User
 
 from datetime import datetime
 
@@ -48,14 +48,26 @@ session.add(Customer1)
 session.commit()
 
 
+User1 = User(name="Jimmy Jones", email="jimmyjones@gmail.com", picture="#")
+session.add(User1)
+session.commit()
 
-Account1 = Item(name="GPU", value=25.00, description="RX 580", category_name="Computer")
+User1 = User(name="Big Fat Billy", email="jimmyjones@gmail.com", picture="#")
+session.add(User1)
+session.commit()
+
+
+
+Account1 = Item(name="GPU", value=25.00, description="RX 580", category_name="Computer", user_id=1)
 session.add(Account1)
 session.commit()
 
-Account1 = Item(name="PSU", value=21.00, description="EVGA Power Supply", category_name="Computer")
+Account1 = Item(name="PSU", value=21.00, description="EVGA Power Supply", category_name="Computer", user_id=2)
 session.add(Account1)
 session.commit()
+
+
+
 
 # Transaction1 = Transaction(id="trans1235453", transactionDateTime=datetime(2008, 11, 22, 19, 53, 42), transactionType="POS", 
 # 	transactionDescription="Coffe",	account_id="accout1235453")
