@@ -8,7 +8,7 @@
 	<h1>Are you sure you want to delete {{item.name}}</h1>
 
 
-<form action="{{url_for('deleteItem', item=item)}}" method="post">
+<form action="{{url_for('deleteItem', item_id=item.id, cat = cat)}}" method="post">
 
 
 <input type="submit" value="Delete">

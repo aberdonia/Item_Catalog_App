@@ -216,21 +216,8 @@ def category(cat):
 	print cat_items
 	return render_template('index.html', cat = cat, cats = cats, cat_items = cat_items)
 
-@app.route('/category/<cat>/<item>/', methods=['GET','POST'])
+@app.route('/category/<cat>/<item>/')
 def item(cat, item):
-	if request.method == 'POST':
-		editItem = session.query(Item).filter_by(name = item).one()
-		if request.form['name']:
-			editItem.name = request.form['name']
-		if request.form['category']:
-			editItem.value = request.form['category']
-		if request.form['value']:
-			editItem.date = request.form['value']
-		if request.form['description']:
-			editItem.description = request.form['description']
-		session.add(editItem)
-		session.commit() 
-
 	cat_items_all = session.query(Item).filter_by(category_name=cat).all()
 	cat_items = []
 	for each in cat_items_all:
@@ -241,15 +228,49 @@ def item(cat, item):
 	print seller.name
 	return render_template('index_items.html', item = item_grab, cat = cat, cats = cats, cat_items = cat_items, seller = seller)
 
-@app.route('/category/<cat>/<item>/edit')
-def editItem(cat, item):
-	item_grab = session.query(Item).filter_by(name=item).one()
+@app.route('/category/<cat>/<int:item_id>/edit', methods=['GET','POST'])
+def editItem(cat, item_id):
+	print "line 1"
+	item_grab = session.query(Item).filter_by(id=item_id).one()
+	print item_grab
+	print item_grab.name
 	if 'username' not in login_session:
 		return redirect('/login')
 	if item_grab.user_id != login_session['user_id']:
 		return "Not Authorised"
+	if request.method == 'POST':
+		editItem = item_grab
+		print "edit item:"
+		print editItem.name
+		if request.form['name']:
+			editItem.name = request.form['name']
+		print 'value here:'
+		if request.form['value']:
+			print 'value if'
+			editItem.value = request.form['value']
+			print request.form['value']
+		if request.form['description']:
+			editItem.description = request.form['description']
+		session.add(editItem)
+		session.commit()
+		return redirect(url_for('index'))
 	else:
 		return render_template('editItem.html', item = item_grab, cat = cat, cats = cats)
+
+@app.route('/category/<cat>/<int:item_id>/delete', methods=['GET','POST'])
+def deleteItem(cat, item_id):
+	item_grab = session.query(Item).filter_by(id=item_id).one()
+	if 'username' not in login_session:
+		return redirect('/login')
+	if item_grab.user_id != login_session['user_id']:
+		return "Not Authorised"
+	if request.method == 'POST':
+		session.delete(item_grab)
+		session.commit()
+		return redirect(url_for('index'))
+	else:
+		return render_template('deleteItem.html', item = item_grab, cat = cat)
+
 
 @app.route('/sell/') ### user protected
 def sell():

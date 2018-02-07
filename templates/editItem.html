@@ -9,13 +9,8 @@
 	<h2>What kind of item do you want to sell?</h2>
 	<h3>Enter the description for your {{cat}} item:</h3>
 
-	<form action="{{url_for('index')}}" method="post">
-	<p>Category: Currently set as {{cat}}</p>
-		<ul>
-			{% for i in cats %}
-			<input type="radio" name="category" value={{i}}>{{i}}<br>
-			{% endfor %}
-		</ul>
+	<form action="{{url_for('editItem', cat = cat, item_id = item.id)}}" method="post">
+	<!-- <p>Category: Currently set as {{cat}}</p> -->
 	<p>Name:</p>
 		<input type="text" size="30" name="name" value="{{item.name}}">
 	<p>Value:</p>
@@ -23,6 +18,6 @@
 	<p>Description:</p>
 		<input type="text" size="30" name="description" value="{{item.description}}">
 
-<input type="submit" value="Create">
+<input type="submit" value="Edit">
 </body>
 </html>
