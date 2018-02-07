@@ -1,6 +1,10 @@
 # Item_Catalog_App
 For Udacity Project
 
+Initalise the google login capability:
+1) Add your own API_KEY to the login.html file in the 'templates' directory.
+2) Add your client secrets file to root directory as 'client_secrets.json'.
+
 Begin by launching your vagrant virtual machine.
 Running the 'project.py' file in python to initialise the database.
 Once server is running, stop it using "CTRL + C" (or alternative).
