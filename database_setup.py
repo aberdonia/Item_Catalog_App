@@ -32,6 +32,17 @@ class Item(Base):
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship(User)
 
+    @property
+    def serialize(self):
+       """Return object data in easily serializeable format"""
+       return {
+            'id': self.id,
+           'name': self.name,
+           'value': self.value,
+           'description' : self.description,
+           'category': self.category_name
+       }
+
 
 
 

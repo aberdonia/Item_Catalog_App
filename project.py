@@ -16,7 +16,7 @@ import random, string
 # flow imports
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-from flask import make_response
+from flask import make_response, jsonify
 
 # client secrets
 CLIENT_ID = json.loads(
@@ -39,9 +39,12 @@ items = []
 for item in items_all:
 	items.append(item.name)
 
-# cats = ["Electronics", "Cars", "Food", "Digital"]
-
 app = Flask(__name__)
+
+@app.route('/JSON')
+def getAllItems():
+	items = session.query(Item).all()
+	return jsonify(Items=[i.serialize for i in items])
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
