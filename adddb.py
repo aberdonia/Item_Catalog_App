@@ -20,9 +20,6 @@ DBSession = sessionmaker(bind=engine)
 # session.rollback()
 session = DBSession()
 
-
-
-
 Customer1 = Category(name="Computer")
 session.add(Customer1)
 session.commit()
@@ -56,37 +53,14 @@ User1 = User(name="Big Fat Billy", email="jimmyjones@gmail.com", picture="#")
 session.add(User1)
 session.commit()
 
-
-
-Account1 = Item(name="GPU", value=25.00, description="RX 580", category_name="Computer", user_id=1)
+Account1 = Item(name="GPU", value=25.00, description="RX 580",
+                category_name="Computer", user_id=1)
 session.add(Account1)
 session.commit()
 
-Account1 = Item(name="PSU", value=21.00, description="EVGA Power Supply", category_name="Computer", user_id=2)
+Account1 = Item(name="PSU", value=21.00, description="EVGA Power Supply",
+                category_name="Computer", user_id=2)
 session.add(Account1)
 session.commit()
-
-
-
-
-# Transaction1 = Transaction(id="trans1235453", transactionDateTime=datetime(2008, 11, 22, 19, 53, 42), transactionType="POS", 
-# 	transactionDescription="Coffe",	account_id="accout1235453")
-
-# session.add(Transaction1)
-# session.commit()
-
-# Bill1 = Bill(id=12, date=datetime(2008, 11, 22, 19, 53, 42), name="Council Tax", 
-# 	description="Monthly bill.", value=79.58, customer_id="123456978sadasd3522")
-
-# session.add(Bill1)
-# session.commit()
-
-# Saving1 = Saving(id=12, date=datetime(2008, 11, 22, 19, 53, 42), name="Mortgage", 
-# 	description="House fund.", value=50.00, customer_id="123456978sadasd3522")
-
-# session.add(Saving1)
-# session.commit()
-
 
 print "Finished!"
-
