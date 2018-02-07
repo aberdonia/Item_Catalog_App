@@ -16,4 +16,6 @@ Use login and logout to access some features in the app.
 'Sell' to add new items to app.
 Once an item has been added, you can edit or delete it if you're the owner. If not then you cannot. Try it.
 
+Use http://localhost:8000/JSON to access JSON data through API GET request.
+
 Thanks
