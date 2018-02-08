@@ -7,8 +7,11 @@
 <body>
 	<header>ebay2 <a href="{{url_for('sell')}}" class="btn btn-primary btn active" role="button">Sell</a>
 		<a href="{{url_for('index')}}" class="btn btn-primary btn active" role="button">Home</a>
+		{% if 'username' not in session %}
 		<a href="{{url_for('showLogin')}}" class="btn btn-primary btn active" role="button">Log In</a>
+		{% else %}
 		<a href="{{url_for('gdisconnect')}}" class="btn btn-primary btn active" role="button">Log Out</a></header>
+		{% endif %}
 		
 
 	<aside>

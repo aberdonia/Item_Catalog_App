@@ -33,18 +33,26 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-cats_all = session.query(Category).all()
-cats = []
-for cat in cats_all:
-    cats.append(cat.name)
-
-items_all = session.query(Item).all()
-items = []
-for item in items_all:
-    items.append(item.name)
-
-
 app = Flask(__name__)
+
+
+# Define global variables in a function and call it
+def initLoad():
+    global cats_all
+    global cats
+    cats_all = session.query(Category).all()
+    cats = []
+    for cat in cats_all:
+        cats.append(cat.name)
+    global items_all
+    global items
+    items_all = session.query(Item).all()
+    items = []
+    for item in items_all:
+        items.append(item.name)
+
+
+initLoad()
 
 
 @app.route('/JSON')
@@ -144,7 +152,7 @@ def gconnect():
     return output
 
 
-# helper functions
+# helper functions to link oauth sign in to local permissions
 def createUser(login_session):
     newUser = User(name=login_session['username'], email=login_session[
                    'email'], picture=login_session['picture'])
@@ -167,6 +175,7 @@ def getUserID(email):
         return None
 
 
+# Route to disconnect from google oauth and log out
 @app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session.get('access_token')
@@ -228,9 +237,9 @@ def index():
     return render_template('index.html', cats=cats)
 
 
-@app.route('/category/<cat>/')
+# Create dynamic URI to display all cat items
+@app.route('/category/<path:cat>/')
 def category(cat):
-    # cats = ["Electronics", "Cars", "Food", "Digital"]
     cat_items_all = session.query(Item).filter_by(category_name=cat).all()
     cat_items = []
     for item in cat_items_all:
@@ -241,7 +250,8 @@ def category(cat):
                            cat_items=cat_items)
 
 
-@app.route('/category/<cat>/<item>/')
+# Create dynamic URI to see specific item description
+@app.route('/category/<path:cat>/<path:item>/')
 def item(cat, item):
     cat_items_all = session.query(Item).filter_by(category_name=cat).all()
     cat_items = []
@@ -255,14 +265,14 @@ def item(cat, item):
                            cats=cats, cat_items=cat_items, seller=seller)
 
 
-@app.route('/category/<cat>/<int:item_id>/edit', methods=['GET', 'POST'])
+# URI to edit specific item, requires user to have initally created the item.
+@app.route('/category/<path:cat>/<int:item_id>/edit', methods=['GET', 'POST'])
 def editItem(cat, item_id):
-    print "line 1"
+    if 'username' not in login_session:
+        return redirect('/login')
     item_grab = session.query(Item).filter_by(id=item_id).one()
     print item_grab
     print item_grab.name
-    if 'username' not in login_session:
-        return redirect('/login')
     if item_grab.user_id != login_session['user_id']:
         return "Not Authorised"
     if request.method == 'POST':
@@ -286,11 +296,13 @@ def editItem(cat, item_id):
                                cat=cat, cats=cats)
 
 
-@app.route('/category/<cat>/<int:item_id>/delete', methods=['GET', 'POST'])
+# URI to delete specific item, requires user to have initally created the item.
+@app.route('/category/<path:cat>/<int:item_id>/delete',
+           methods=['GET', 'POST'])
 def deleteItem(cat, item_id):
-    item_grab = session.query(Item).filter_by(id=item_id).one()
     if 'username' not in login_session:
         return redirect('/login')
+    item_grab = session.query(Item).filter_by(id=item_id).one()
     if item_grab.user_id != login_session['user_id']:
         return "Not Authorised"
     if request.method == 'POST':
@@ -301,13 +313,12 @@ def deleteItem(cat, item_id):
         return render_template('deleteItem.html', item=item_grab, cat=cat)
 
 
+# Route to sell an item, user must be registerd and signed intot he site
 @app.route('/sell/')  # user protected
 def sell():
     if 'username' not in login_session:
         return redirect('/login')
     return render_template('sell.html', cats=cats)
-    # cats = ["Electronics", "Cars", "Food", "Digital"]
-    # return render_template('sell.html', cats = cats)
 
 
 if __name__ == '__main__':
